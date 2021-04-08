@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %} {% block content %}
+
+<h1 class="title">Thank you for purchasing the job, you can approach to the employer by filling this forms and messenging directly to the employer</h1>
+
+<hr>
+<h1 class="title">Apply for job - {{ job.title }}</h1>
+<hr>
+<p class="is-size-4">{{ job.description }}</p>
+<hr>
+<h1 class="subtitle">Here is More Detailed Information On Job: </h1>
+<b>Employer phone number: </b>{{ job.phone_number}}<br>
+<b>Location: </b>{{ job.job_country}}, {{ job.job_adress }}, {{ job.job_zipcode }}<br>
+<b>Payment Type: </b>{{ job.get_payment_type_display}}<br>
+<b>Salary Type: </b>{{ job.get_salary_type_display}}<br>
+<b>Wage: </b>{{ job.wage_min}}-{{ job.wage_max }} in {{ job.get_currency_display }}<br>
+<b>Employee Type: </b>{{ job.get_employee_type_display}}<br>
+<b>Employee gender: </b>{{ job.get_preffered_gender_display}}<br>
+
+<form action="" method="POST">
+    {% csrf_token %} {% if form.errors %} {% for error in form.errors %}
+    <div class="notification is-danger">
+        {{ error }}
+    </div>
+    {% endfor %} {% endif %}
+
+
+
+
+    <div class="field">
+        <label for="">Content</label>
+        <div class="control">
+            <textarea class="textarea" name="content" id="id_content"></textarea>
+
+        </div>
+    </div>
+
+    <div class="field">
+        <label for="">Experience</label>
+        <div class="control">
+            <textarea class="textarea" name="experience" id="id_experience"></textarea>
+
+        </div>
+    </div>
+
+    <div class="field">
+        <div class="control">
+            <button class="button is-success">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

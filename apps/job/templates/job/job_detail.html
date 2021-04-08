@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %} {% block content %}
+<h1 class="title">{{ job.title }} ({{ job.get_status_display }}) </h1>
+
+<p class="is-size-4">{{ job.description }}</p>
+
+<b>Location: </b>{{ job.job_country}}<br>
+<b>Payment Type: </b>{{ job.get_payment_type_display}}<br>
+<b>Salary Type: </b>{{ job.get_salary_type_display}}<br>
+<b>Wage: </b>{{ job.wage_min}}-{{ job.wage_max }} in {{ job.get_currency_display }}<br>
+<b>Employee Type: </b>{{ job.get_employee_type_display}}<br>
+<b>Employee gender: </b>{{ job.get_preffered_gender_display}}<br>
+
+
+
+<hr> {% if job.status == 'active' %}
+<form class="text-center border border-light p-5" action="{% url 'apply_for_job' job.id %}" method="POST">
+    {% csrf_token %}
+    <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="rzp_test_ExeUGieMdyvqvk" data-amount="50000" data-currency="INR" data-order_id="{{payment.id}}" data-buttontext="Pay with Razorpay" data-name="{{job.title}}" data-description="charge for job purchase"
+        data-image="https://example.com/your_logo.jpg" data-prefill.name="111" data-prefill.email="{{user.email}}" data-theme.color="#F37254"></script>
+</form>
+{% else %}
+<p>This job is not available anymore!</p>
+{% endif %} {% endblock %}

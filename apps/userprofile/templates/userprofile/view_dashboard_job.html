@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %} {% block content %}
+<h1 class="title">View job - {{ job.title }}</h1>
+<h1 class="title">{{ job.title }} </h1>
+
+<a href="{% url 'edit_job' job.id %}" class="button is-success mb-4">Edit</a>
+
+<p class="is-size-4">{{ job.description }}</p>
+
+
+<b>Employer phone number: </b>{{ job.phone_number}}<br>
+<b>Location: </b>{{ job.job_country}}, {{ job.job_adress }}, {{ job.job_zipcode }}<br>
+<b>Payment Type: </b>{{ job.get_payment_type_display}}<br>
+<b>Salary Type: </b>{{ job.get_salary_type_display}}<br>
+<b>Wage: </b>{{ job.wage_min}}-{{ job.wage_max }} in {{ job.get_currency_display }}<br>
+<b>Employee Type: </b>{{ job.get_employee_type_display}}<br>
+<b>Employee gender: </b>{{ job.get_preffered_gender_display}}<br> {{ job.created_at }} {% for application in job.applications.all %}
+<a href="{% url 'view_application' application.id %}">{{ application.created_by.username }}</a> {% endfor %} {% endblock %}

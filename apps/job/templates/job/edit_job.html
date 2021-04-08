@@ -1,0 +1,255 @@
+{% extends 'core/base.html' %} {% block content %}
+<div id="edit-job-app">
+    <h1 class="title">Edit job</h1>
+
+    <form v-on:submit="validateForm" method="post" action=".">
+        {% csrf_token %} {% if form.errors %} {% for error in form.errors %}
+        <div class="notification is-danger">
+            {{ error }}
+        </div>
+        {% endfor %} {% endif %}
+
+        <div class="notification is-danger" v-if="errors.length">
+            <p v-for="error in errors">
+                [[ error ]]
+            </p>
+        </div>
+
+        <div class="field">
+            <label>Title</label>
+
+            <div class="control">
+                <input class="input" type="text" name="title" id="id_title" v-model="title">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Description</label>
+
+            <div class="control">
+                <textarea class="textarea" name="description" id="id_description" v-model="description"></textarea>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Phone Number of Employer</label>
+
+            <div class="control">
+                <input class="input" name="phone_number" id="id_phone_number" value="{% if job.phone_number %}{{ job.phone_number }}{% endif %}"></input>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Job Country</label>
+
+            <div class="control">
+                <input class="input" type="text" name="job_country" id="id_job_country" v-model="job_country">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Job address</label>
+
+            <div class="control">
+                <input class="input" type="text" name="job_adress" id="id_job_adress" value="{% if job.job_adress %}{{ job.job_adress }}{% endif %}">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Zipcode</label>
+
+            <div class="control">
+                <input class="input" type="text" name="job_zipcode" id="id_job_zipcode" value="{% if job.job_zipcode %}{{ job.job_zipcode }}{% endif %}">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Payment Type</label>
+            <div class="control">
+                <div class="select">
+                    <select name="payment_type" v-model="payment_type">
+                            <option value="">Choose Type</option>
+                            <option value="cash_1">CASH</option>
+                            <option value="click_2">CLICK</option>
+                            <option value="payme_3">PAYME</option>
+                            <option value="oson_4">OSON</option>
+                            <option value="visa_5">VISA</option>
+                            <option value="cryptocurrency_6">CRYPTOCURRENCY</option>
+                            <option value="ewallet_7">EWALLET</option>
+                        </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Salary Type</label>
+
+            <div class="control">
+                <div class="select">
+                    <select name="salary_type" v-model="salary_type">
+                            <option value="">Choose Type</option>
+                            <option value="fixed_1">FIXED</option>
+                            <option value="hourly_1">HOURLY</option>
+                            <option value="by_project_1">BY_PROJECT</option>
+                        </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Min-Wage</label>
+
+            <div class="control">
+                <input class="input" type="text" name="wage_min" id="id_wage_min" v-model="wage_min">
+            </div>
+        </div>
+        <div class="field">
+            <label>Max-Wage</label>
+
+            <div class="control">
+                <input class="input" type="text" name="wage_max" id="id_wage_max" v-model="wage_max">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Currency</label>
+
+            <div class="control">
+                <div class="select">
+                    <select name="currency" v-model="currency">
+                            <option value="">Choose Currency</option>
+                            <option value="uzs_1">UZS</option>
+                            <option value="usd_2">USD</option>
+                            <option value="eur_3">EUR</option>
+                            <option value="rubl_4">RUBL</option>
+                        </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Employee Type</label>
+
+            <div class="control">
+                <div class="select">
+                    <select name="employee_type" v-model="employee_type">
+                            <option value="">Choose Employee Type Here</option>
+                            <option value="online_1">ONLINE</option>
+                            <option value="offline_2">OFFLINE</option>
+
+                        </select>
+                </div>
+            </div>
+        </div>
+
+        <label>Preffered Gender for The Job</label>
+
+        <div class="control">
+            <div class="select">
+                <select name="preffered_gender" v-model="preffered_gender">
+                            <option value="">Select Gender</option>
+                            <option value="male_1">MALE</option>
+                            <option value="female_2">FEMALE</option>
+                            <option value="any_3">ANY</option>
+
+                </select>
+            </div>
+        </div>
+
+
+        <label>Job Status</label>
+
+        <div class="control">
+            <div class="select">
+                <select name="status">
+                            <option value="active" {% if job.status == 'active' %} selected{% endif %}>Active</option>
+                            <option value="employed" {% if job.status == 'employed' %} selected{% endif %}>Employed</option>
+                            <option value="archived" {% if job.status == 'archived' %} selected{% endif %}>Archived</option>
+
+                </select>
+            </div>
+        </div>
+
+        
+
+
+
+
+        <div class="field">
+            <div class="control">
+                <button class="button is-success" type="submit">Update</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+    const EditJobApp = {
+        data() {
+            return {
+                title: '{{ job.title }}',
+                description: '{{ job.description }}',
+                job_country: '{{ job.job_country }}',
+                payment_type: '{{ job.payment_type }}',
+                salary_type: '{{ job.salary_type }}',
+                wage_min: '{{ job.wage_min }}',
+                wage_max: '{{ job.wage_max }}',
+                currency: '{{ job.currency }}',
+                employee_type: '{{ job.employee_type }}',
+                preffered_gender: '{{ job.preffered_gender }}',
+                errors: []
+            }
+        },
+        delimiters: ['[[', ']]'],
+        methods: {
+            validateForm(e) {
+                this.errors = []
+
+                if (this.title === '') {
+                    this.errors.push('The title field is missing!')
+                }
+
+                if (this.short_description === '') {
+                    this.errors.push('The short description field is missing!')
+                }
+
+                if (this.job_country === '') {
+                    this.errors.push('The Country of job field is missing!')
+                }
+
+                if (this.payment_type === '') {
+                    this.errors.push('The payment type is missing!')
+                }
+                if (this.salary_type === '') {
+                    this.errors.push('The salary type is missing!')
+                }
+                if (this.wage_min === '') {
+                    this.errors.push('The minimum wage field is missing!')
+                }
+                if (this.wage_max === '') {
+                    this.errors.push('The maximum wage field is missing!')
+                }
+                if (this.currency === '') {
+                    this.errors.push('The currency type is missing!')
+                }
+                if (this.employee_type === '') {
+                    this.errors.push('The employee type is missing!')
+                }
+                if (this.preffered_gender === '') {
+                    this.errors.push('The gender type is missing!')
+                }
+
+                if (this.errors.length) {
+                    e.preventDefault()
+
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+
+    Vue.createApp(EditJobApp).mount('#edit-job-app');
+</script>
+{% endblock %}

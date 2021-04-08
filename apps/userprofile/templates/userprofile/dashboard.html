@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}{% load crispy_forms_tags %} {% block content %} {% if messages %} {% for message in messages %}
+<div class="notification is-{{ message.tags }}">
+    {{ message }}
+</div>
+{% endfor %} {% endif %}
+
+<h1 class="title">Dashboard</h1>
+<div class="container">
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+                <img src="{{ user.userprofile.image.url }}" alt="Profile Photo">
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p>
+
+                    <strong>{{user.first_name}} {{ user.last_name }}</strong> <small>@{{ user.username }}</small>
+                    <br> {{user.userprofile.phone_number}}
+                    <br> {{user.email}}
+                </p>
+            </div>
+
+        </div>
+        {{ user.userprofile.image.url }}
+    </article>
+</div>
+
+<hr>
+<form method="POST" action="." enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        <legend class="title">Profile Info</legend>
+        {{ u_form|crispy }} {{ p_form|crispy }}
+    </fieldset>
+    <div class="field">
+        <div class="control">
+            <button class="button is-success mt-2">Update</button>
+        </div>
+    </div>
+</form>
+
+
+<hr> {% if user.userprofile.is_employer %} Post A job Here
+<h2 class="subtitle">Jobs</h2>
+<a href="{% url 'add_job' %}" class="button is-success">Post Job</a> {% for job in request.user.jobs.all %}
+<div class="job">
+    <a href="{% url 'view_dashboard_job' job.id %}">{{ job.title }} ({{ job.get_status_display }})</a>
+</div>
+{% empty %}
+<p>You don't have any jobs yet...</p>
+{% endfor %} {% else %}
+<h2 class="subtitle">Applications</h2>
+{% for application in request.user.applications.all %}
+<div class="application">
+    <a href="{% url 'view_application' application.id %}">{{ application.job.title }}</a>
+</div>
+{% empty %}
+<p>You have not applied for any jobs yet ...</p>
+
+{% endfor %} {% endif %} {% endblock %}
